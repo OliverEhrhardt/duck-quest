@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "babel-preset-stage-0": "^6.16.0",
-    "createjs-collection": "^0.8.2-1"
+    "createjs-collection": "^0.8.2-1",
+    "webpack-dev-server": "^1.16.2"
   },
   "devDependencies": {
     "babel-core": "^6.20.0",
