@@ -1,37 +1,57 @@
-import createjs from 'createjs-collection';
+// import createjs from 'createjs-collection';
 import Duck from './Duck.js';
+import {LoadQueue} from 'PreloadJS';
+import EaselJS, {Stage, SpriteStage} from 'EaselJS';
+// console.log( PreloadJS);
+// console.log(EaselJS);
+console.log(EaselJS);
 
+const queue = new LoadQueue(false);
+queue.on('fileload', (event)=>{
 
+	const w = event.result.width;
+	const h = event.result.height;
+	const src = event.result.src;
+	const data = {
+		images: [src],
+		frames: {width:w/8+1, height:h, regX:0, regX:0},
+		animations: {
+			run: [0,6,"run", 0.5],
+		}
+	};
+	const spriteSheet = new createjs.SpriteSheet(data);
+	let sprite = new createjs.Sprite(spriteSheet);
+	sprite.gotoAndPlay("run");
+	sprite.scaleX = 10;
+	sprite.scaleY = 10;
+	stage.addChild(sprite);
+});
+queue.loadFile('src/img/batright.png');
+var stage = new Stage("canvas");
 
+// var duck = new Duck(0,0);
 
-var stage = new createjs.Stage("canvas");
-
-
-// var img1 = new Image();
-// img1.src = 'src/img/duck.png';
-// img1.onload = function(){
-//     var data = {
-//         images: [img1.src],
-//         frames: {width:img1.width, height:img1.height, regX:0, regY:0},
-//         animations: {
-//             stand:0,
-//             run:[1,5],
-//             jump:[6,8,"run"]
-//         }
-//     };
-//     var spriteSheet = new createjs.SpriteSheet(data);
-//     var animation = new createjs.Sprite(spriteSheet, "run");
-// 	animation.gotoAndStop("stand");
-// 	stage.addChild(animation);
-// 	console.log(stage);
-// 	stage.update();	
-// 	 createjs.Ticker.addEventListener("tick", handleTick);
-// 	 function handleTick(event) {
-// 	     animation.regX -= 10;
-// 	     stage.update();
-// 	 }
+// let img = new Image();
+// img.src = "src/img/batleft.png";
+// img.onload = function(){
+// 	const data = {
+// 		images: [img.src],
+// 		frames: {width:img.width/8, height:img.height, regX:0, regX:0},
+// 		animations: {
+// 			run: [0,1,"run", 0.5],
+// 		}
+// 	};
+// 	let spriteSheet = new createjs.SpriteSheet(data);
+// 	let sprite = new createjs.Sprite(spriteSheet);
+// 	sprite.gotoAndPlay("run");
+// 	sprite.scaleX = 0.5;
+// 	sprite.scaleY = 0.5;
+// 	stage.addChild(sprite);
 // }
 
+createjs.Ticker.on("tick", ()=>{stage.update()})
 
-
-
+// createjs.Ticker.setFPS(30);
+// createjs.Ticker.addListener(function()){
+  
+// }
