@@ -1,32 +1,37 @@
-// import createjs from 'createjs-collection';
-import Duck from './Duck.js';
+// import Duck from './Duck.js';
 import {LoadQueue} from 'PreloadJS';
-import EaselJS, {Stage, SpriteStage} from 'EaselJS';
+import {Stage, Sprite, SpriteSheet, Ticker} from 'EaselJS';
 // console.log( PreloadJS);
 // console.log(EaselJS);
-console.log(EaselJS);
+// console.log(EaselJS);
 
 const queue = new LoadQueue(false);
+let sprite = new Sprite();
+sprite.ready = false;
 queue.on('fileload', (event)=>{
 
 	const w = event.result.width;
 	const h = event.result.height;
+	console.log(h/2, w/2)
 	const src = event.result.src;
 	const data = {
 		images: [src],
-		frames: {width:w/8+1, height:h, regX:0, regX:0},
+		frames: {width:w/4+3.5, height:h},
 		animations: {
-			run: [0,6,"run", 0.5],
+			run: [0,1,"run", 0.5],
 		}
 	};
-	const spriteSheet = new createjs.SpriteSheet(data);
-	let sprite = new createjs.Sprite(spriteSheet);
+	const sSheet = new SpriteSheet(data);
+	sprite.spriteSheet = sSheet;
 	sprite.gotoAndPlay("run");
-	sprite.scaleX = 10;
-	sprite.scaleY = 10;
+	sprite.regX = data.frames.width/2; sprite.regY = data.frames.height/2;
+	sprite.x = 200;
+	sprite.y = 200;
+	// sprite.rotation = 45
 	stage.addChild(sprite);
+	sprite.ready = true;
 });
-queue.loadFile('src/img/batright.png');
+queue.loadFile('src/img/duck.png');
 var stage = new Stage("canvas");
 
 // var duck = new Duck(0,0);
@@ -41,17 +46,19 @@ var stage = new Stage("canvas");
 // 			run: [0,1,"run", 0.5],
 // 		}
 // 	};
-// 	let spriteSheet = new createjs.SpriteSheet(data);
-// 	let sprite = new createjs.Sprite(spriteSheet);
+// 	let spriteSheet = new SpriteSheet(data);
+// 	let sprite = new Sprite(spriteSheet);
 // 	sprite.gotoAndPlay("run");
 // 	sprite.scaleX = 0.5;
 // 	sprite.scaleY = 0.5;
 // 	stage.addChild(sprite);
 // }
 
-createjs.Ticker.on("tick", ()=>{stage.update()})
+Ticker.on("tick", ()=>{
+	if(sprite.ready) sprite.rotation = ( sprite.rotation- 5)%360;
+	stage.update()
+});
 
-// createjs.Ticker.setFPS(30);
-// createjs.Ticker.addListener(function()){
+
   
 // }

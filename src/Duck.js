@@ -1,6 +1,6 @@
-import createjs from 'createjs-collection';
+import {Sprite} from 'EaselJS';
 
-class Duck extends createjs.Sprite {
+class Duck extends Sprite {
 	constructor(){
   		super();
 

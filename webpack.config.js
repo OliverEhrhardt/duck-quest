@@ -26,10 +26,10 @@ module.exports = {
                 test: /bower_components(\\|\/)EaselJS(\\|\/).*\.js$/, 
                 loader: 'imports?this=>window!exports?window.createjs' 
             },
-            // { 
-            //     test: /bower_components\/PreloadJS\/.*\.js$/, 
-            //     loader: 'imports?this=>window!exports?window.createjs' 
-            // }        
+            { 
+                test: /bower_components(\\|\/)PreloadJS(\\|\/).*\.js$/, 
+                loader: 'imports?this=>window!exports?window.createjs' 
+            }        
         ]
     },
     plugins: [
