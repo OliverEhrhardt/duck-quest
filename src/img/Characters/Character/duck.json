@@ -1,0 +1,11 @@
+{
+	"frames": {
+		"width":252, 
+		"height":288
+	},
+	"animations": {
+		"stand": 0,
+		"run": [0,2,"run", 0.5]
+	},
+	"images": ["src/img/Characters/Character/duck.png"]
+}

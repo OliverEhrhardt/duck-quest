@@ -1,64 +1,28 @@
-// import Duck from './Duck.js';
 import {LoadQueue} from 'PreloadJS';
 import {Stage, Sprite, SpriteSheet, Ticker} from 'EaselJS';
-// console.log( PreloadJS);
-// console.log(EaselJS);
-// console.log(EaselJS);
+import Character from './Character.js';
+import {checkPixelCollision} from 'CollisionJS';
 
-const queue = new LoadQueue(false);
-let sprite = new Sprite();
-sprite.ready = false;
-queue.on('fileload', (event)=>{
+const manifest = [
+	{src:"src/img/Characters/Character/duck.json", id:"duck", type:"spritesheet"}
+]
 
-	const w = event.result.width;
-	const h = event.result.height;
-	console.log(h/2, w/2)
-	const src = event.result.src;
-	const data = {
-		images: [src],
-		frames: {width:w/4+3.5, height:h},
-		animations: {
-			run: [0,1,"run", 0.5],
-		}
-	};
-	const sSheet = new SpriteSheet(data);
-	sprite.spriteSheet = sSheet;
-	sprite.gotoAndPlay("run");
-	sprite.regX = data.frames.width/2; sprite.regY = data.frames.height/2;
-	sprite.x = 200;
-	sprite.y = 200;
-	// sprite.rotation = 45
-	stage.addChild(sprite);
-	sprite.ready = true;
-});
-queue.loadFile('src/img/duck.png');
-var stage = new Stage("canvas");
+document.getElementById("canvas").focus();
 
-// var duck = new Duck(0,0);
+const stage = new Stage("canvas");
+const loader = new LoadQueue(false);
+loader.on('fileload', (event)=>{
+	let duck = new Character(50,50,0,0,event.result);
+	let duck2 = new Character(50, 50, 100, 100, event.result);
 
-// let img = new Image();
-// img.src = "src/img/batleft.png";
-// img.onload = function(){
-// 	const data = {
-// 		images: [img.src],
-// 		frames: {width:img.width/8, height:img.height, regX:0, regX:0},
-// 		animations: {
-// 			run: [0,1,"run", 0.5],
-// 		}
-// 	};
-// 	let spriteSheet = new SpriteSheet(data);
-// 	let sprite = new Sprite(spriteSheet);
-// 	sprite.gotoAndPlay("run");
-// 	sprite.scaleX = 0.5;
-// 	sprite.scaleY = 0.5;
-// 	stage.addChild(sprite);
-// }
+	duck.giveControl();
+	duck2.cloneControl();
+	stage.addChild(duck, duck2);
+	Ticker.on("tick", () => {
+		// console.log(checkPixelCollision(duck, duck2));
+		stage.update();
+	});
 
-Ticker.on("tick", ()=>{
-	if(sprite.ready) sprite.rotation = ( sprite.rotation- 5)%360;
-	stage.update()
 });
 
-
-  
-// }
+loader.loadManifest(manifest);

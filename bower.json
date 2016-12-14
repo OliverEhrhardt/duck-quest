@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "EaselJS": "^0.8.2",
-    "PreloadJS": "^0.6.2"
+    "PreloadJS": "^0.6.2",
+    "Collision-Detection-for-EaselJS": "https://github.com/olsn/Collision-Detection-for-EaselJS.git"
   }
 }

@@ -2,7 +2,7 @@
 const webpack = require('webpack');
 const path = require('path');
 
-
+const BowerWebpackPlugin = require('bower-webpack-plugin')
 
 module.exports = {
     devtool: '#source-map',
@@ -16,7 +16,7 @@ module.exports = {
             
             {
                 test: /.*\.js$/,
-                exclude: /(node_modules)/,
+                exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015', 'stage-0']
@@ -29,18 +29,26 @@ module.exports = {
             { 
                 test: /bower_components(\\|\/)PreloadJS(\\|\/).*\.js$/, 
                 loader: 'imports?this=>window!exports?window.createjs' 
+            },
+            { 
+                test: /bower_components(\\|\/)Collision-Detection-for-EaselJS(\\|\/).*\.js$/, 
+                loader: 'imports?this=>window!exports?window.ndgmr' 
             }        
         ]
     },
     plugins: [
-        new webpack.ResolverPlugin(
-            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('.bower.json', ['main'])
-        )
+        // new webpack.ResolverPlugin(
+        //     new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('.bower.json', ['main'])
+        // ),
+        new BowerWebpackPlugin()
     ],
 
     resolve: {
         // Add bower_components as a modules root
-        modulesDirectories: ['node_modules', 'bower_components']
+        modulesDirectories: ['node_modules', 'bower_components'],
+        alias: {
+            CollisionJS: path.resolve(__dirname, "./bower_components/Collision-Detection-for-EaselJS/src/ndgmr.Collision.js")
+        }
     }
 };
 
