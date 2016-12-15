@@ -1,0 +1,12 @@
+{
+	"frames": {
+		"width":45, 
+		"height":45,
+		"spacing": 2 
+	},
+	"animations": {
+		"stand": [0,6,"stand"],
+		"run": [0,6,"run"]
+	},
+	"images": ["src/img/Characters/Enemies/batright.png"]
+}
