@@ -1,11 +1,14 @@
 import {LoadQueue} from 'PreloadJS';
-import {Stage, Sprite, SpriteSheet, Ticker} from 'EaselJS';
+import {Stage, Sprite, SpriteSheet, Ticker, Bitmap} from 'EaselJS';
 import Character from './Character.js';
 // import {checkPixelCollision} from 'CollisionJS';
+
+console.log(window.innerWidth);
  
 const manifest = [
 	{src:"src/json/SpriteSheets/bat.json", id:"bat", type:"spritesheet"},
 	{src:"src/json/SpriteSheets/duck.json", id:"duck", type:"spritesheet"},
+	{src:"src/img/Characters/Enemies/batright.png", id:"duck2"}
 ]
 
 document.getElementById("canvas").focus();
@@ -13,16 +16,18 @@ document.getElementById("canvas").focus();
 const stage = new Stage("canvas");
 const loader = new LoadQueue(false);
 loader.on('complete', (event)=>{
-	let duck = new Character(50,50,0,0,loader.getResult("bat"));
-	let duck2 = new Character(50, 50, 0, 50, loader.getResult("bat"));
+	let duck = new Character(100,100,0,0,loader.getResult("bat"));
+	let duck2 = new Bitmap(loader.getResult("duck2"));
+
+	duck2.x = 10; duck2.y = 10;
 
 	// duck.speed = 20
 
 	duck.giveControl();
 	stage.addChild(duck, duck2);
 	Ticker.on("tick", () => {
-		duck.rotation += 5
-		console.log(duck.checkCollision(duck2));
+		duck2.rotation += 5
+		// console.log(duck.checkCollision(duck2));
 		stage.update();
 	});
 

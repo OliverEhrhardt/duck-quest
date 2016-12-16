@@ -57,12 +57,12 @@ module.exports = {
         }
     },
 
-    // devServer: {
-    //     hot: true,
+    devServer: {
+        hot: true,
     //     contentBase: './',
     //     debug: false,
     //     colors: true,
-    // }
+    }
 };
 
 
