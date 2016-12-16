@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "./src/main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "scripts": {
+      "postinstall": "npm run fixDistDebugRef",
+      "fixDistDebugRef": "mkdir node_modules\\debug\\dist && copy node_modules\\debug\\debug.js node_modules\\debug\\dist\\"
+    },
   "author": "",
   "license": "ISC",
   "dependencies": {

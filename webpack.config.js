@@ -6,10 +6,15 @@ const BowerWebpackPlugin = require('bower-webpack-plugin')
 
 module.exports = {
     devtool: '#source-map',
-    entry  : './src/main.js',
+    entry  : [
+    // "webpack-dev-server/client?http://localhost:8080/",
+    'webpack/hot/dev-server',
+    './src/main.js',
+    ],
     output : {
-        path     : __dirname,
-        filename : 'dist/duckquest.min.js'
+        path: '/',
+        filename : '/dist/duckquest.min.js',
+        publicPath: '/'
     },
     module: {
         loaders: [
@@ -19,7 +24,7 @@ module.exports = {
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['es2015', 'stage-0']
+                    presets: ['es2015', 'stage-0'],
                 }
             },
             { 
@@ -40,7 +45,8 @@ module.exports = {
         // new webpack.ResolverPlugin(
         //     new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('.bower.json', ['main'])
         // ),
-        new BowerWebpackPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new BowerWebpackPlugin(),
     ],
 
     resolve: {
@@ -49,7 +55,14 @@ module.exports = {
         alias: {
             CollisionJS: path.resolve(__dirname, "./bower_components/Collision-Detection-for-EaselJS/src/ndgmr.Collision.js")
         }
-    }
+    },
+
+    // devServer: {
+    //     hot: true,
+    //     contentBase: './',
+    //     debug: false,
+    //     colors: true,
+    // }
 };
 
 

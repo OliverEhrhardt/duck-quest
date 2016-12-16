@@ -5,16 +5,20 @@ class Character extends Sprite {
 	constructor(width, height, x, y, spriteSheet){
 	  	super(spriteSheet);
 	  	this.gotoAndPlay("stand");
+	  	this.height = height;
+	  	this.width = width;
+	  	this.speed = 5;
+	  	
+
+	  	let bounds = this.getBounds();
+	  	this.scaleX = width/bounds.height;
+	  	this.scaleY = height/bounds.width;
+	  	this.regX = bounds.width/2; this.regY = bounds.height/2;
 	  	this.x = x;
 	  	this.y = y;
-	  	this.height = height;
-	  	this.width = width
-	  	this.speed = 5;
-	  	let pt = this.globalToLocal(width/2, height/2)
-	  	this.regX = pt.x; this.regY = pt.y;
 
-	  	this.scaleX = width/spriteSheet._frameWidth;
-	  	this.scaleY = height/spriteSheet._frameHeight;
+	  	// console.log(this.regX, this.regY, width, height, this.getBounds());
+
 
 	  	let keyMap = {};
 		const handleDown = (event) => { 
@@ -31,18 +35,27 @@ class Character extends Sprite {
 		};
 		document.onkeyup = handleUp;
 
+		let ind;
 		const handleMovement = (event) => {
 			if(keyMap['w']||keyMap['a']||keyMap['s']||keyMap['d']||keyMap['ArrowUp']||keyMap['ArrowLeft']||keyMap['ArrowDown']||keyMap['ArrowRight']){
 				if(this.currentAnimation === "stand") this.gotoAndPlay('run');
 				if(keyMap['w'] || keyMap['ArrowUp']) this.y -= this.speed;
 				if(keyMap['a'] || keyMap['ArrowLeft']){
 					this.x -= this.speed;
-					if(this.scaleX > 0) this.scaleX = -this.scaleX;
+					if(this.scaleX > 0){
+						ind = this.currentFrame;
+						this.scaleX = -this.scaleX;
+						this.gotoAndPlay(ind);
+					} 
 				} 
 				if(keyMap['s'] || keyMap['ArrowDown']) this.y += this.speed;
 				if(keyMap['d'] || keyMap['ArrowRight']){
 					this.x += this.speed;
-					if(this.scaleX < 0) this.scaleX = -this.scaleX;
+					if(this.scaleX < 0){
+						ind = this.currentFrame;
+						this.scaleX = -this.scaleX;
+						this.gotoAndPlay(ind);
+					} 
 				} 
 			} 
 		}
