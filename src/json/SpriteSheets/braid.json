@@ -1,0 +1,12 @@
+{
+	"frames": {
+		"width":125, 
+		"height":135,
+		"spacing": 2
+	},
+	"animations": {
+		"stand": [0,9,"stand"],
+		"run": [0,9,"run"]
+	},
+	"images": ["src/img/Characters/Character/braidrun.png"]
+}
