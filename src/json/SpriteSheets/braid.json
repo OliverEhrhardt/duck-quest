@@ -1,12 +1,13 @@
 {
 	"frames": {
-		"width":125, 
+		"width":130, 
 		"height":135,
-		"spacing": 2
+		"spacing": 0
 	},
 	"animations": {
-		"stand": [0,9,"stand"],
-		"run": [0,9,"run"]
+		"stand": [10,"stand"],
+		"run": [0,18,"run"]
 	},
 	"images": ["src/img/Characters/Character/braidrun.png"]
+
 }
