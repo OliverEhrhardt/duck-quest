@@ -7,8 +7,9 @@ import Character from './Character.js';
 const manifest = [
 	{src:"src/json/SpriteSheets/bat.json", id:"bat", type:"spritesheet"},
 	{src:"src/json/SpriteSheets/braid.json", id:"braid", type:"spritesheet"},
-	{src:"src/json/SpriteSheets/duckarm.json", id:"duck", type:"spritesheet"},
-	{src:"src/img/Characters/Enemies/batright.png", id:"duck2"}
+	{src:"src/json/SpriteSheets/duck.json", id:"duck", type:"spritesheet"},
+	{src:"src/img/Characters/Character/duck.png", id:"duck2"},
+	{src:"src/img/Characters/Enemies/batright.png", id:"bat2"}
 ]
 
 document.getElementById("canvas").focus();
@@ -18,15 +19,13 @@ const loader = new LoadQueue(false);
 loader.on('complete', (event)=>{
 	let duck = new Bitmap(loader.getResult("duck2"));
 	let duck3 = duck.clone();
-	duck3.rotation = 90;
 	duck.y = 400;
-	duck3.x = 400;
-	duck3.y = 30;
-	let duck2 = new Character(100, 100, 300, 100, loader.getResult("braid"));
+	duck3.x = -800;
+	duck3.y = 360;
+	let duck2 = new Character(80, 150, 300, 50, loader.getResult("duck"));
 	const env = [duck, duck3];
 
 	stage.addChild(duck, duck2, duck3);
-	duck2.speed = 5
 
 	Ticker.on("tick", () => {
 		// console.log(duck2.box);

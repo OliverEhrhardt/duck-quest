@@ -4,7 +4,7 @@ import {checkPixelCollision} from 'CollisionJS';
 
 /**
  * Class creates a playable character
- * @example const char = new Character(100,100,0,0,loadedSpriteSheet);
+ * @example let char = new Character(100, 100, 0, 0, loadedSpriteSheet);
  */
 class Character extends Sprite {
 
@@ -69,6 +69,11 @@ class Character extends Sprite {
 	  	 */
 	  	this.y = y;
 
+	  	/**
+	  	 * max fallrate of character
+	  	 * @type {Number}
+	  	 */
+		this.fallRate = -(height>>2)
 	  	//maps keys currently pressed
 	  	let keyMap = {};
 
@@ -78,18 +83,23 @@ class Character extends Sprite {
 	  	 * @private
 	  	 * @param  {Event}
 	  	 */
-		const handleDown = (event) => { 
-			if(event.key.match(/(d|ArrowRight)/)){
+		const handleDown = (event) => {
+			// if(event.key.match(/^(w|a|s|d|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)$/)){
+			// 	this.gotoAndPlay("run");
+			// }
+			if(event.key.match(/^(d|ArrowRight)$/)){
 				if(this.velX !== this.speed) this.velX = this.speed;
 				if(this.scaleX < 0) this.scaleX = -this.scaleX;
 			}
-			if(event.key.match(/(a|ArrowLeft)/)){
+			else if(event.key.match(/^(a|ArrowLeft)$/)){
 				if(this.velX !== -this.speed) this.velX = -this.speed;
 				if(this.scaleX > 0) this.scaleX = -this.scaleX;
 			}
-			// if(event.key.match(/(w|a|s|d|ArrowUp|ArrowLeft|ArrowRight|ArrowDown)/)){
-			// 	keyMap[event.key] = true; 
-			// } 
+			else if(event.key.match(/^(w|ArrowUp)$/) && this.jumpNum < this.jumpMax){
+				this.y -= this.jump;
+				this.velY = this.jump;
+				this.jumpNum += 1;			
+			}
 		};
 		document.onkeydown = handleDown;
 
@@ -100,23 +110,19 @@ class Character extends Sprite {
 	  	 * @param  {Event}
 	  	 */
 		const handleUp = (event) => {
-			if(event.key.match(/(a|ArrowLeft)/) && this.velX < 0)
-				this.velX = 0
-			if(event.key.match(/(d|ArrowRight)/) && this.velX > 0)
-				this.velX = 0
-			// if(event.key.match(/(w|a|s|d|ArrowUp|ArrowLeft|ArrowRight|ArrowDown)/)){
-			// 	keyMap[event.key] = false; 
-			// 	this.gotoAndPlay('stand'); 				
-			// } 
+			if(event.key.match(/^(a|ArrowLeft)$/) && this.velX < 0){
+				this.velX = 0;
+			}
+			if(event.key.match(/^(d|ArrowRight)$/) && this.velX > 0){
+				this.velX = 0;
+			}
+			if(event.key.match(/^(w|a|s|d|ArrowUp|ArrowLeft|ArrowRight|ArrowDown)$/)){
+				keyMap[event.key] = false; 
+				this.gotoAndPlay('stand'); 				
+			} 
 		};
 		document.onkeyup = handleUp;
 
-
-		const handleMovement = (event) => {
-			this.x += this.velX;
-			this.y -= this.velY;
-		};
-		this.on("tick", handleMovement);
 
 		/**
 		 * Default movement handler. Fires every tick.
@@ -124,36 +130,15 @@ class Character extends Sprite {
 		 * @private
 		 * @param  {Event} event - event object.
 		 */
-		// const handleHorzMovement = (event) => {
-		// 	if(keyMap['w']||keyMap['a']||keyMap['s']||keyMap['d']||keyMap['ArrowUp']||keyMap['ArrowLeft']||keyMap['ArrowDown']||keyMap['ArrowRight']){
-		// 		if(this.currentAnimation === "stand") this.gotoAndPlay('run');
-		// 		if(keyMap['w'] || keyMap['ArrowUp']) this.y -= this.velX;
-		// 		if(keyMap['a'] || keyMap['ArrowLeft']){
-		// 			this.x -= this.velX;
-		// 			if(this.scaleX > 0){
-		// 				ind = this.currentFrame;
-		// 				this.scaleX = -this.scaleX;
-		// 				this.gotoAndPlay(ind);
-		// 			} 
-		// 		} 
-		// 		if(keyMap['s'] || keyMap['ArrowDown']) this.y += this.velX;
-		// 		if(keyMap['d'] || keyMap['ArrowRight']){
-		// 			this.x += this.velX;
-		// 			if(this.scaleX < 0){
-		// 				ind = this.currentFrame;
-		// 				this.scaleX = -this.scaleX;
-		// 				this.gotoAndPlay(ind);
-		// 			} 
-		// 		} 
-		// 	} 
-		// }
-		// this.on("tick", handleHorzMovement);
-
-		// NOTE: uncomment for jump implimentation
-		// const handleVertMovement = (event) => {
-		// 	this.y += this.velY;
-		// }
-		// this.on("tick", handleVertMovement);
+		const handleMovement = (event) => {
+			if(this.velX !== 0 && this.currentAnimation === "stand") this.gotoAndPlay("run");
+			else if(this.currently === "run") this.gotoAndPlay("stand")
+			this.x += this.velX;
+			if(this.velY >= this.fallRate) this.y -= this.velY;
+			else this.y -= this.fallRate;
+			// debugger;
+		};
+		this.on("tick", handleMovement);
 
 		/**
 		 * Gives the player control of this character
@@ -174,13 +159,35 @@ class Character extends Sprite {
 		}
 	}
 
-	grounded = false;
-
+	/**
+	 * gravity of player
+	 * @type {Number}
+	 */
 	gravity = -1;
 
-	jump = 1;
+	/**
+	 * jump power
+	 * @type {Number}
+	 */
+	jump = 15;
 
-	speed = 1;
+	/**
+	 * [jumpMax description]
+	 * @type {Number}
+	 */
+	jumpMax = 2;
+
+	/**
+	 * Number of jump performed
+	 * @type {Number}
+	 */
+	jumpNum = 0;
+
+	/**
+	 * top speed of character
+	 * @type {Number}
+	 */
+	speed = 10;
 
  	/**
  	 * x velocity of character
@@ -194,33 +201,34 @@ class Character extends Sprite {
 	 */
 	velY = 0;
 
+
+	/**
+	 * bounds character to environmental constraints
+	 * @function
+	 * @param  {Array} env - Array of Bitmaps that the character cannot pass through
+	 */
 	checkEnvironment(env){
-
-		// const len = env.length;
-		// const bounds = this.box;
-
-		// let i;
-		// for(i=0;i<len;i++){
-
-		// }
-
 		const len = env.length;
 		const bounds = this.box
 		let i;
 		for(i=0;i<len;i++){
 			const collision = this.checkCollision(env[i]);
-			if(collision){
+			if(collision.height){
 				// debugger;
-				if(bounds.y2 > collision.y2 && bounds.y2 - collision.y < bounds.y/7){
+				if(bounds.y < collision.y && bounds.y2 - (this.height>>2) < collision.y){
 					this.velY = 0;
-					this.y = collision.y - (this.height/2) + 1;
-				}if(bounds.y-1 == collision.y && bounds.y2-1 !== collision.y2){
-					this.vely = 0;
-					this.y = collision.y2 + (this.height/2);
-				}if(bounds.x2-1 >= collision.x2 && bounds.x < collision.x && collision.height > 20){
-					// console.log(collision, bounds);
+					this.y -= collision.height-1;
+					this.jumpNum = 0;
+				}
+				else if(bounds.x < collision.x){
 					this.velX = 0;
-					this.x = collision.x - (this.width/2);
+					this.x -= collision.width;
+				}else if(bounds.x2 > collision.x2){
+					this.velX = 0;
+					this.x += collision.width;
+				}else if(bounds.y2 > collision.y2){
+					this.velY = 0;
+					this.y += collision.height;
 				}
 			}else{
 				this.velY += this.gravity;

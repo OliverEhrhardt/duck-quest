@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server",
     "postinstall": "npm run fixDistDebugRef",
+    "doc": "documentation build src/** -f html -o docs",
     "fixDistDebugRef": "mkdir -p node_modules/debug/dist && cp node_modules/debug/debug.js node_modules/debug/dist/"
   },
   "author": "",
@@ -13,16 +14,17 @@
   "dependencies": {
     "babel-preset-stage-0": "^6.16.0",
     "esdoc-es7-plugin": "0.0.3",
-    "jquery": "^3.1.1",
-    "webpack-dev-server": "^1.16.2"
+    "jquery": "^3.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.20.0",
     "babel-loader": "^6.2.9",
     "babel-preset-es2015": "^6.18.0",
     "bower-webpack-plugin": "~0.1.9",
+    "documentation": "^4.0.0-beta16",
     "exports-loader": "^0.6.3",
     "imports-loader": "^0.7.0",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
   }
 }
