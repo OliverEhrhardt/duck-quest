@@ -1,0 +1,12 @@
+{
+	"frames": {
+		"width":200, 
+		"height":200,
+		"spacing": 0
+	},
+	"animations": {
+		"stand": 0,
+		"run": [0,4,"run", 1]
+	},
+	"images": ["src/img/Characters/Character/duckarmright.png"]
+}

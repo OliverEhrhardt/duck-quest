@@ -1,7 +1,8 @@
 {
 	"frames": {
-		"width":150, 
-		"height":150
+		"width":80, 
+		"height":150,
+		"spacing": 70
 	},
 	"animations": {
 		"stand": 0,
