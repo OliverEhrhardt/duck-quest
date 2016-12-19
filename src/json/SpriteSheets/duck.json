@@ -1,11 +1,12 @@
 {
 	"frames": {
-		"width":252, 
-		"height":288
+		"width":80, 
+		"height":150,
+		"spacing": 70
 	},
 	"animations": {
 		"stand": 0,
-		"run": [0,2,"run", 0.5]
+		"run": [0,6,"run", 0.7]
 	},
-	"images": ["src/img/Characters/Character/duck.png"]
+	"images": ["src/img/Characters/Character/duckwalk.png"]
 }

@@ -5,8 +5,9 @@ import Character from './Character.js';
 
  
 const manifest = [
+	{src:"src/json/SpriteSheets/bat.json", id:"bat", type:"spritesheet"},
 	{src:"src/json/SpriteSheets/braid.json", id:"braid", type:"spritesheet"},
-	{src:"src/json/SpriteSheets/duck.json", id:"duck", type:"spritesheet"},
+	{src:"src/json/SpriteSheets/duckarm.json", id:"duck", type:"spritesheet"},
 	{src:"src/img/Characters/Enemies/batright.png", id:"duck2"}
 ]
 
@@ -26,6 +27,7 @@ loader.on('complete', (event)=>{
 
 	stage.addChild(duck, duck2, duck3);
 	duck2.speed = 5
+
 	Ticker.on("tick", () => {
 		// console.log(duck2.box);
 		// const collision = duck2.checkCollision(duck);
