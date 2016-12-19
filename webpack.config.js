@@ -28,15 +28,15 @@ module.exports = {
                 }
             },
             { 
-                test: /bower_components(\\|\/)EaselJS(\\|\/).*\.js$/, 
+                test: /bower_components\/EaselJS\/.*\.js$/, 
                 loader: 'imports?this=>window!exports?window.createjs' 
             },
             { 
-                test: /bower_components(\\|\/)PreloadJS(\\|\/).*\.js$/, 
+                test: /bower_components\/PreloadJS\/.*\.js$/, 
                 loader: 'imports?this=>window!exports?window.createjs' 
             },
             { 
-                test: /bower_components(\\|\/)Collision-Detection-for-EaselJS(\\|\/).*\.js$/, 
+                test: /bower_components\/Collision-Detection-for-EaselJS\/.*\.js$/, 
                 loader: 'imports?this=>window!exports?window.ndgmr' 
             }        
         ]
