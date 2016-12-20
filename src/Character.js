@@ -172,7 +172,7 @@ class Character extends Sprite {
 	 * [jumpMax description]
 	 * @type {Number}
 	 */
-	jumpMax = 3;
+	jumpMax = 4;
 
 	/**
 	 * Number of jump performed
@@ -216,14 +216,13 @@ class Character extends Sprite {
 						this.velY = 0;
 						this.y -= collision.height-1;
 						this.jumpNum = 0;
-					}
-					else if(bounds.x < collision.x){
+					}else if(bounds.x < collision.x && collision.height > collision.width){
 						this.velX = 0;
 						this.x -= collision.width;
-					}else if(bounds.x2 > collision.x2){
+					}else if(bounds.x2 > collision.x2 && collision.height > collision.width){
 						this.velX = 0;
 						this.x += collision.width;
-					}else if(bounds.y2 > collision.y2){
+					}else if(bounds.y2 > collision.y2 && collision.height < collision.width){
 						this.velY = 0;
 						this.y += collision.height;
 					}
@@ -249,7 +248,6 @@ class Character extends Sprite {
 			y2: this.y+h
 		}
 	}
-
 
 	/**
 	 * Changes Sprite Sheet of this character
