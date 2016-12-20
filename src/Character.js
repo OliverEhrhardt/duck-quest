@@ -84,9 +84,7 @@ class Character extends Sprite {
 	  	 * @param  {Event}
 	  	 */
 		const handleDown = (event) => {
-			// if(event.key.match(/^(w|a|s|d|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)$/)){
-			// 	this.gotoAndPlay("run");
-			// }
+
 			if(event.key.match(/^(d|ArrowRight)$/)){
 				if(this.velX !== this.speed) this.velX = this.speed;
 				if(this.scaleX < 0) this.scaleX = -this.scaleX;
@@ -136,7 +134,6 @@ class Character extends Sprite {
 			this.x += this.velX;
 			if(this.velY >= this.fallRate) this.y -= this.velY;
 			else this.y -= this.fallRate;
-			// debugger;
 		};
 		this.on("tick", handleMovement);
 
@@ -175,7 +172,7 @@ class Character extends Sprite {
 	 * [jumpMax description]
 	 * @type {Number}
 	 */
-	jumpMax = 2;
+	jumpMax = 3;
 
 	/**
 	 * Number of jump performed
@@ -208,34 +205,41 @@ class Character extends Sprite {
 	 * @param  {Array} env - Array of Bitmaps that the character cannot pass through
 	 */
 	checkEnvironment(env){
-		const len = env.length;
-		const bounds = this.box
-		let i;
-		for(i=0;i<len;i++){
-			const collision = this.checkCollision(env[i]);
-			if(collision.height){
-				// debugger;
-				if(bounds.y < collision.y && bounds.y2 - (this.height>>2) < collision.y){
-					this.velY = 0;
-					this.y -= collision.height-1;
-					this.jumpNum = 0;
+		const handleEnvironment = (event) => {
+			const len = env.length;
+			const bounds = this.box
+			let i;
+			for(i=0;i<len;i++){
+				const collision = this.checkCollision(env[i]);
+				if(collision){
+					if(bounds.y < collision.y && bounds.y2 - (this.height>>2) < collision.y){
+						this.velY = 0;
+						this.y -= collision.height-1;
+						this.jumpNum = 0;
+					}
+					else if(bounds.x < collision.x){
+						this.velX = 0;
+						this.x -= collision.width;
+					}else if(bounds.x2 > collision.x2){
+						this.velX = 0;
+						this.x += collision.width;
+					}else if(bounds.y2 > collision.y2){
+						this.velY = 0;
+						this.y += collision.height;
+					}
+				}else{
+					this.velY += this.gravity;
 				}
-				else if(bounds.x < collision.x){
-					this.velX = 0;
-					this.x -= collision.width;
-				}else if(bounds.x2 > collision.x2){
-					this.velX = 0;
-					this.x += collision.width;
-				}else if(bounds.y2 > collision.y2){
-					this.velY = 0;
-					this.y += collision.height;
-				}
-			}else{
-				this.velY += this.gravity;
 			}
 		}
+
+		this.on('tick', handleEnvironment)
 	}
 
+	/**
+	 * gives coordinates of top left and bottom right vertices
+	 * @return {Object} coordinates
+	 */
 	get box(){
 		const w = this.width/2; const h = this.height/2
 		return {
@@ -271,7 +275,7 @@ class Character extends Sprite {
 	 * @param  {Sprite|Bitmap} target - the object we are checking collisions with
 	 */
 	checkCollision(target){
-		return checkPixelCollision(this, target, 0.8, true)
+		return checkPixelCollision(this, target, 0.8, true);
 	}
 }
 

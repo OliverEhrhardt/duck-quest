@@ -21,20 +21,14 @@ loader.on('complete', (event)=>{
 	let duck3 = duck.clone();
 	duck.y = 400;
 	duck3.x = -800;
-	duck3.y = 360;
+	duck3.y = 150;
 	let duck2 = new Character(80, 150, 300, 50, loader.getResult("duck"));
 	const env = [duck, duck3];
+	duck2.checkEnvironment(env);
 
 	stage.addChild(duck, duck2, duck3);
 
-	Ticker.on("tick", () => {
-		// console.log(duck2.box);
-		// const collision = duck2.checkCollision(duck);
-		// if(collision) console.log(collision, duck2.box);
-
-		duck2.checkEnvironment(env);
-		stage.update();
-	});
+	Ticker.on("tick", stage);
 
 });
 
