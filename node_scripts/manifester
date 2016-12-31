@@ -15,7 +15,7 @@ function writeData(files){
 		files.forEach((file) => {
 			const LoadItem = {};
 
-			stub = file.match(/\w+\./)[0].replace(".", "")
+			stub = file.match(/[\w\-\_]+\./)[0].replace(".", "")
 
 			LoadItem.src = file;
 			LoadItem.id = stub;

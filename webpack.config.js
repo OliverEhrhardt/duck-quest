@@ -40,7 +40,7 @@ module.exports = {
                 loader: 'imports?this=>window!exports?window.ndgmr' 
             },
             {
-                test: /src\/json\/Maps\/.*\.json/,
+                test: /src\/json\/maps\.json/,
                 loader: 'json-loader'
             },
             {

@@ -8,5 +8,5 @@
 		"stand": [0,6,"stand"],
 		"run": [0,6,"run"]
 	},
-	"images": ["src/img/Characters/Enemies/batright.png"]
+	"images": ["src/sprite-images/characters/enemies/batright.png"]
 }

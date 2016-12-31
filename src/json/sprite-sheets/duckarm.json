@@ -8,5 +8,5 @@
 		"stand": 0,
 		"run": [0,4,"run", 1]
 	},
-	"images": ["src/img/Characters/Character/duckarmright.png"]
+	"images": ["src/sprite-images/characters/character/duckarmright.png"]
 }

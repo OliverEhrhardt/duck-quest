@@ -8,6 +8,6 @@
 		"stand": [10,"stand"],
 		"run": [0,18,"run"]
 	},
-	"images": ["src/img/Characters/Character/braidrun.png"]
+	"images": ["src/sprite-images/characters/character/braidrun.png"]
 
 }

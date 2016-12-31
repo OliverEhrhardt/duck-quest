@@ -8,5 +8,5 @@
 		"stand": 0,
 		"run": [0,6,"run", 0.7]
 	},
-	"images": ["src/img/Characters/Character/duckwalk.png"]
+	"images": ["src/sprite-images/characters/character/duckwalk.png"]
 }

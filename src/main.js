@@ -1,10 +1,10 @@
 import {LoadQueue, proxy} from 'PreloadJS';
 import {Stage, Sprite, SpriteSheet, Ticker, Bitmap, Shape} from 'EaselJS';
-import mapData from "./json/Maps/maps.json";
+import mapData from "./json/maps.json";
 import manifest from "./json/manifest.json";
 import Environment from "./Environment.js";
 // import MapLoader from "./MapLoader.js"
-// import Character from './Character.js';
+import Character from './Character.js';
 // import {checkPixelCollision} from 'CollisionJS';
 // 
 // 
@@ -15,6 +15,8 @@ import Environment from "./Environment.js";
 // 	{src: mapData.ground3.image, id: "ground", type: "image"}
 // ];
 // 
+// 
+document.getElementById("canvas").focus();
 
 console.log(mapData)
 
@@ -24,10 +26,9 @@ loader.loadManifest(manifest);
 loader.on('complete', (event)=>{
 	const map = new Environment(mapData['2ground'], 10, 10);
 
-	const map2 = new Environment(mapData['ground3'], 10, 10);
+	const char = new Character(80, 150, 10, 10, loader.getResult("duck"));
 
-
-	map.posX = -500;
+	// map.posX = -500;
 	// map.posY = -500;
 	const polyline = new Shape();
 	const g = polyline.graphics;
@@ -43,12 +44,11 @@ loader.on('complete', (event)=>{
 	})
 
 	// polyline.graphics = g;
-	stage.addChild(map, polyline);
+	stage.addChild(map, polyline, char);
 	stage.update();
 });
 
 
-document.getElementById("canvas").focus();
 
 // const manifest = [
 // 	{src:"src/json/Maps/ground3.json", id:"ground", type:"json"},
