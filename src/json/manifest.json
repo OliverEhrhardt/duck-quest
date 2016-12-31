@@ -1,0 +1,134 @@
+{
+  "manifest": [
+    {
+      "src": "src/img/BGs/1/end.png",
+      "id": "end",
+      "type": "image"
+    },
+    {
+      "src": "src/img/BGs/1/portal.png",
+      "id": "portal",
+      "type": "image"
+    },
+    {
+      "src": "src/img/BGs/1/portalB.png",
+      "id": "portalB",
+      "type": "image"
+    },
+    {
+      "src": "src/img/BGs/1/portalto.png",
+      "id": "portalto",
+      "type": "image"
+    },
+    {
+      "src": "src/img/BGs/BG.png",
+      "id": "BG",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Character/baidrun.png",
+      "id": "baidrun",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Character/braidrun.png",
+      "id": "braidrun",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Character/duck.png",
+      "id": "duck",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Character/duckarm.png",
+      "id": "duckarm",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Character/duckarmright.png",
+      "id": "duckarmright",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Character/duckwalk.png",
+      "id": "duckwalk",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Enemies/batleft.png",
+      "id": "batleft",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Enemies/batleftpoison.png",
+      "id": "batleftpoison",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Enemies/batlefttoxic.png",
+      "id": "batlefttoxic",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Enemies/batright.png",
+      "id": "batright",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Enemies/batrightpoison.png",
+      "id": "batrightpoison",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Characters/Enemies/batrighttoxic.png",
+      "id": "batrighttoxic",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Maps/1ground.png",
+      "id": "1ground",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Maps/2ground.png",
+      "id": "2ground",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Maps/ground.png",
+      "id": "ground",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Maps/ground2.png",
+      "id": "ground2",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Maps/ground3.png",
+      "id": "ground3",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Maps/ground4.png",
+      "id": "ground4",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Objects/sign.png",
+      "id": "sign",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Weapons/bat.png",
+      "id": "bat",
+      "type": "image"
+    },
+    {
+      "src": "src/img/Weapons/katana.png",
+      "id": "katana",
+      "type": "image"
+    }
+  ]
+}

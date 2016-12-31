@@ -139,8 +139,7 @@ class Character extends Sprite {
 
 		/**
 		 * Gives the player control of this character
-		 * @type {Function}
-		 */
+		 * @function
 		this.giveControl = () => {
 			document.onkeydown = handleDown;
 			document.onkeyup = handleUp;
@@ -158,7 +157,7 @@ class Character extends Sprite {
 
 	/**
 	 * gravity of player
-	 * @type {Number}
+	 * @function
 	 */
 	gravity = -1;
 
