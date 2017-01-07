@@ -3,13 +3,17 @@ const Canvas = require('canvas')
   , canvas = new Canvas(200, 200)
   , ctx = canvas.getContext('2d');
 
+// const earcut = require('earcut');
+const decomp = require('poly-decomp')
+
+
 const fs = require('fs');
 
 const options = {
 
 };
 
-const outputDir = process.argv[2];
+const outputFile = process.argv[2];
 
 
 function readFiles(files, done){
@@ -75,6 +79,50 @@ function readFiles(files, done){
 				}
 			}
 
+			class Edge{
+				constructor(v1, v2){
+					this.x = v1.x;
+					this.y = v1.y;
+					this.x2 = v2.x;
+					this.y2 = v2.y;
+
+					this.angle = Math.atan2(v2.y - v1.y, v2.x - v1.x);
+				}
+			}
+
+			function sectionalize(polygon){
+				console.log("sectionalizeing polygon");
+				const points = polygon.map((e)=>([e.x, e.y]));
+				decomp.makeCCW(points);
+				const convex = decomp.decomp(points);
+				return convex.map((p)=>(p.map((e)=>({x: e[0], y: e[1]}))));
+
+			}
+
+			// function triangulate(polygon){
+			// 	const flatten = [];
+			// 	polygon.forEach((point)=>{
+			// 		flatten.push(point.x);
+			// 		flatten.push(point.y);
+			// 	});
+
+
+			// 	const triangles = earcut(flatten);
+			// 	const len = triangles.length;
+			// 	const newPoly = [];
+			// 	let i, ind;
+			// 	for(i=0; i<len; i+=3){
+			// 		const tri = []
+			// 		tri.push(polygon[triangles[i]]);
+			// 		tri.push(polygon[triangles[i+1]]);
+			// 		tri.push(polygon[triangles[i+2]]);
+
+			// 		newPoly.push(tri);
+			// 	}
+
+			// 	return newPoly;
+			// }
+
 			const visited = {};
 			function visitEdges(src, offset){
 
@@ -129,6 +177,8 @@ function readFiles(files, done){
 					}
 				}
 
+				// triangulate(polygon);
+
 				return polygon;		
 				
 			}
@@ -142,7 +192,10 @@ function readFiles(files, done){
 					if(n.value > 0 && visited[ind] !== true && n.onEdge){
 
 						p = (visitEdges(n, offset));
-						if(p.length > 2) map.push(p);
+						if(p.length > 2){
+							// triangulate(p);
+							map.push(...sectionalize(p));
+						}
 
 					}
 				}
@@ -172,7 +225,7 @@ function readFiles(files, done){
 
 let files = process.argv.slice(4);
 readFiles(files, (json)=>{
-	fs.writeFile(outputDir + "maps.json", JSON.stringify(json, null, 2), (err)=>{if(err) throw err});
+	fs.writeFile(outputFile, JSON.stringify(json, null, 2), (err)=>{if(err) throw err});
 });
 
 if(process.stdin.isTTY === undefined){
@@ -182,7 +235,7 @@ if(process.stdin.isTTY === undefined){
 		files = data.split('\n').slice(0, -1);
 		readFiles(files, (json)=>{
 			console.log('args piped, writing file');
-			fs.writeFile(outputDir + "maps.json", JSON.stringify(json, null, 2), (err)=>{if(err) throw err});
+			fs.writeFile(outputFile, JSON.stringify(json, null, 2), (err)=>{if(err) throw err});
 		});
 	});
 }

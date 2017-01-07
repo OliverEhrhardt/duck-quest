@@ -39,14 +39,18 @@ module.exports = {
                 test: /bower_components\/Collision-Detection-for-EaselJS\/.*\.js$/, 
                 loader: 'imports?this=>window!exports?window.ndgmr' 
             },
+            // {
+            //     test: /src\/json\/maps\.json/,
+            //     loader: 'json-loader'
+            // },
+            // {
+            //     test: /src\/json\/manifest\.json/,
+            //     loader: 'json-loader'
+            // },
             {
-                test: /src\/json\/maps\.json/,
+                test: /src\/json\/[\w\-\_]+\.json$/,
                 loader: 'json-loader'
-            },
-            {
-                test: /src\/json\/manifest\.json/,
-                loader: 'json-loader'
-            },
+            }
 
         ]
     },

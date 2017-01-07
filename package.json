@@ -5,6 +5,7 @@
   "main": "./src/main.js",
   "scripts": {
     "start": "webpack-dev-server",
+    "install": "napa https://github.com/ivanfratric/polypartition.git",
     "postinstall": "npm run fixDistDebugRef && bower install",
     "doc": "documentation build src/** -f html -o docs",
     "fixDistDebugRef": "mkdir -p node_modules/debug/dist && cp node_modules/debug/debug.js node_modules/debug/dist/"
@@ -21,9 +22,13 @@
     "bower-webpack-plugin": "~0.1.9",
     "canvas": "^1.6.2",
     "documentation": "^4.0.0-beta16",
+    "earcut": "^2.1.1",
     "exports-loader": "^0.6.3",
+    "ffi": "^2.2.0",
     "imports-loader": "^0.7.0",
     "json-loader": "^0.5.4",
+    "napa": "^2.3.0",
+    "poly-decomp": "^0.2.1",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   }

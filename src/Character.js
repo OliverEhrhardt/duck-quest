@@ -1,6 +1,9 @@
 import {Sprite} from 'EaselJS';
 import {checkPixelCollision} from 'CollisionJS';
+import playerData from './json/player.json';
 
+
+console.log(playerData);
 
 /**
  * Class creates a playable character
@@ -17,37 +20,15 @@ class Character extends Sprite {
 	 * @param  {Number} y - y positon of the sprite based off center
 	 * @param  {SpriteSheet} spriteSheet - Sprite Sheet of character
 	 */
-	constructor(width, height, x, y, spriteSheet){
+	constructor(spriteSheet){
 
 		//setup
 	  	super(spriteSheet);
 	  	this.gotoAndPlay("stand");
-
-	  	/**
-	  	 * height of character in pixels
-	  	 * @type {Number}
-	  	 */
-	  	this.height = height;
-
-	  	/**
-	  	 * width of character in pixels
-	  	 * @type {Number}
-	  	 */
-	  	this.width = width;
 	  	
 	  	//scale sprite to correct size
 	  	let bounds = this.getBounds();
-
-	  	/**
-	  	 * Scales x plane of character
-	  	 * @type {Number}
-	  	 */
-	  	this.scaleX = width/bounds.width;
-	  	/**
-	  	 * Scales y plane of character
-	  	 * @type {Number}
-	  	 */
-	  	this.scaleY = height/bounds.height;
+	  	const canvas = document.getElementById('canvas');
 	  	/**
 	  	 * registration point's x value
 	  	 * @type {Number}
@@ -58,22 +39,12 @@ class Character extends Sprite {
 	  	 * @type {Number}
 	  	 */
 	  	this.regY = bounds.height/2;
-	  	/**
-	  	 * Character's x position
-	  	 * @type {Number}
-	  	 */
-	  	this.x = x;
-	  	/**
-	  	 * Character's x position
-	  	 * @type {Number}
-	  	 */
-	  	this.y = y;
 
 	  	/**
 	  	 * max fallrate of character
 	  	 * @type {Number}
 	  	 */
-		this.fallRate = -(height>>2)
+		// this.fallRate = -(bounds.height>>2)
 	  	//maps keys currently pressed
 	  	let keyMap = {};
 
@@ -94,9 +65,10 @@ class Character extends Sprite {
 				if(this.scaleX > 0) this.scaleX = -this.scaleX;
 			}
 			else if(event.key.match(/^(w|ArrowUp)$/) && this.jumpNum < this.jumpMax){
-				this.y -= this.jump;
+				// this.y -= this.jump;
 				this.velY = this.jump;
-				this.jumpNum += 1;			
+				this.jumpNum += 1;
+				// debugger;			
 			}
 		};
 		document.onkeydown = handleDown;
@@ -115,7 +87,6 @@ class Character extends Sprite {
 				this.velX = 0;
 			}
 			if(event.key.match(/^(w|a|s|d|ArrowUp|ArrowLeft|ArrowRight|ArrowDown)$/)){
-				keyMap[event.key] = false; 
 				this.gotoAndPlay('stand'); 				
 			} 
 		};
@@ -129,17 +100,71 @@ class Character extends Sprite {
 		 * @param  {Event} event - event object.
 		 */
 		const handleMovement = (event) => {
+			this.prev = {};
+			this.prev.x = this.x; this.prev.y = this.y;
+			// console.log(this.prev);
 			if(this.velX !== 0 && this.currentAnimation === "stand") this.gotoAndPlay("run");
-			else if(this.currently === "run") this.gotoAndPlay("stand")
-			this.x += this.velX;
-			if(this.velY >= this.fallRate) this.y -= this.velY;
-			else this.y -= this.fallRate;
+			else if(this.currently === "run") this.gotoAndPlay("stand");
+			if(this.map !== undefined){
+				const edges = this.onCameraEdge;
+				if(!edges["bottom"]){
+					if(this.velY < 0 && this.y > canvas.height - this.yThreshold){
+						edges["bottom"] = true;
+					}
+				}else{
+					if(this.velY > 0 || this.y < canvas.height - this.yThreshold){
+						edges["bottom"] = false;
+					}else if(!edges["top"]){
+						this.map.posY = this.map.y + this.velY;
+					}
+				}
+				if(!edges["top"]){
+					if(this.velY > 0 && this.y < this.yThreshold){
+						edges["top"] = true;
+					}
+				}else{
+					if(this.velY < 0 || this.y > this.yThreshold){
+						edges["top"] = false;
+					}else if(!edges["bottom"]){
+						this.map.posY = this.map.y + this.velY;
+					}
+				}
+				if(!edges["top"] && !edges["bottom"]){
+					this.y -= this.velY
+				}
+				if(!edges["right"]){
+					if(this.velX > 0 && this.x > canvas.width - this.xThreshold){
+						edges["right"] = true;
+					}
+				}else{
+					if(this.velX < 0 || this.x < canvas.width - this.xThreshold){
+						edges["right"] = false;
+					}else if(!edges["left"]){
+						this.map.posX = this.map.x - this.velX;
+					}
+				}
+				if(!edges["left"]){
+					if(this.velX < 0 && this.x < this.xThreshold){
+						edges["left"] = true;
+					}
+				}else{
+					if(this.velX > 0 || this.x > this.xThreshold){
+						edges["left"] = false;
+					}else if(!edges["right"]){
+						this.map.posX = this.map.x - this.velX;
+					}
+				}
+				if(!edges["left"] && !edges["right"]){
+					this.x += this.velX
+				}
+			}
 		};
 		this.on("tick", handleMovement);
 
 		/**
 		 * Gives the player control of this character
 		 * @function
+		*/
 		this.giveControl = () => {
 			document.onkeydown = handleDown;
 			document.onkeyup = handleUp;
@@ -155,23 +180,34 @@ class Character extends Sprite {
 		}
 	}
 
+	xThreshold = 400;
+
+	yThreshold = 150;
+
+	onCameraEdge = {
+		'top': false,
+		'bottom': false,
+		'left': false,
+		'right': false,
+	};
+
 	/**
 	 * gravity of player
 	 * @function
 	 */
-	gravity = -1;
+	gravity = -3;
 
 	/**
 	 * jump power
 	 * @type {Number}
 	 */
-	jump = 15;
+	jump = 20;
 
 	/**
 	 * [jumpMax description]
 	 * @type {Number}
 	 */
-	jumpMax = 4;
+	jumpMax = 2;
 
 	/**
 	 * Number of jump performed
@@ -183,7 +219,7 @@ class Character extends Sprite {
 	 * top speed of character
 	 * @type {Number}
 	 */
-	speed = 10;
+	speed = 20;
 
  	/**
  	 * x velocity of character
@@ -203,35 +239,177 @@ class Character extends Sprite {
 	 * @function
 	 * @param  {Array} env - Array of Bitmaps that the character cannot pass through
 	 */
-	checkEnvironment(env){
-		const handleEnvironment = (event) => {
-			const len = env.length;
-			const bounds = this.box
-			let i;
-			for(i=0;i<len;i++){
-				const collision = this.checkCollision(env[i]);
-				if(collision){
-					if(bounds.y < collision.y && bounds.y2 - (this.height>>2) < collision.y){
-						this.velY = 0;
-						this.y -= collision.height-1;
-						this.jumpNum = 0;
-					}else if(bounds.x < collision.x && collision.height > collision.width){
-						this.velX = 0;
-						this.x -= collision.width;
-					}else if(bounds.x2 > collision.x2 && collision.height > collision.width){
-						this.velX = 0;
-						this.x += collision.width;
-					}else if(bounds.y2 > collision.y2 && collision.height < collision.width){
-						this.velY = 0;
-						this.y += collision.height;
-					}
-				}else{
-					this.velY += this.gravity;
-				}
-			}
-		}
+	checkEnvironment(map){
+		this.map = map;
 
-		this.on('tick', handleEnvironment)
+		class Edge{
+			constructor(v1, v2){
+				// this.v1 = v1;
+				// this.v2 = v2;
+				
+				this.x = v1.x;
+				this.y = v1.y;
+				this.x2 = v2.x;
+				this.y2 = v2.y;
+
+				this.angle = Math.atan2(v2.y - v1.y, v2.x - v1.x);
+
+				this.line = {x: Math.cos(this.angle - (Math.PI/2)), y: Math.sin(this.angle - (Math.PI/2))}
+			}
+		};
+
+		const checkIntersection = (edges1, points1, edges2, points2) => {
+			const edges = [...edges2, ...edges1],
+				dists = [];
+			let min1 = Infinity, 
+				max1 = -Infinity, 
+				min2 = Infinity, 
+				max2 = -Infinity,
+				len = edges.length,
+				collision = false,
+				dMin = Infinity,
+				i, 
+				line, 
+				edge,
+				d1,
+				d2,
+				d;
+
+			const visited = {};
+			for(i=0; i<len; i++){
+				if(visited[edges[i].angle] !== true){
+					edge = edges[i];
+					visited[edge.angle] = true;
+					line = edge.line;
+				 	min1 = Infinity, 
+					max1 = -Infinity, 
+					min2 = Infinity, 
+					max2 = -Infinity,
+					points1.forEach((point)=>{
+						d = line.x*point.x + line.y*point.y;
+						// console.log(point, d);
+						if(d < min1) min1 = d;
+						if(d > max1) max1 = d;
+					});
+					points2.forEach((point)=>{
+						d = line.x*point.x + line.y*point.y;
+						if(d < min2) min2 = d;
+						if(d > max2) max2 = d;
+					});
+
+					if(max1 <= min2 && min1 < max2) return false;
+					if(max1 > min2 && min1 >= max2) return false;
+
+					d1 = max1 - min2;
+					d2 = max2 - min1;
+
+					d = Math.min(d1, d2);
+
+					dists.push({
+						dist: Math.floor(d),
+						line: line,
+						edge: edge
+					});		
+				}
+
+			}
+
+			let line1, line2, x, x2, y, y2, x1, y1;
+			const minDist = dists.reduce((a,b)=>{
+
+				if(a.dist < b.dist) return a;
+				else if(a.dist === b.dist){
+
+					x = this.x;
+					y = this.y;
+					// console.log(x, y);
+					x1 = a.edge.x;
+					y1 = a.edge.y;
+					x2 = a.edge.x2;
+					y2 = a.edge.y2;
+
+					
+
+					d1 = Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1)/Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+
+					x1 = b.edge.x;
+					y1 = b.edge.y;
+					x2 = b.edge.x2;
+					y2 = b.edge.y2;
+
+					d2 = Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1)/Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+
+
+					return d1 < d2 ? a : b;
+				}else return b;
+			}, dists[0]);
+			return minDist;
+
+		};
+
+		const handleEnvironment = (event) => {
+			// console.log(this.x, this.y);
+			const data = this.map.data;
+			const box = this.box;
+			const points = [
+				{x: box.x, y: box.y},
+				{x: box.x2, y: box.y},
+				{x: box.x2, y: box.y2},
+				{x: box.x, y: box.y2},
+			];
+
+			// console.log(points);
+
+			const playerEdges = [];
+			let i, len;
+			len = points.length;
+			for(i=0; i<len-1; i++){
+				playerEdges.push(new Edge(points[i], points[i+1]));
+			}
+			playerEdges.push(new Edge(points[len-1], points[0]));
+
+
+			const shapes = [];
+			let children, obj;
+			data.forEach((shape)=>{
+				len = shape.length;
+
+				children = [];
+				obj = {};
+				obj.points = shape;
+				for(i=0; i<len-1; i++){
+					children.push(new Edge(shape[i], shape[i+1]));
+				}
+				children.push(new Edge(shape[len-1], shape[0]));
+				obj.edges = children;
+				shapes.push(obj);
+			});
+
+			const collisions = [];
+			let collision, collided = false;
+			shapes.forEach((shape)=>{
+				collision = checkIntersection(playerEdges, points, shape.edges, shape.points);
+				if(collision) collisions.push(collision);
+			});
+
+			if(collisions.length){
+				collision = collisions.reduce((a,b)=>(a.dist > b.dist ? a : b), collisions[0]);
+				if(collision.edge.angle < Math.PI/50 && collision.edge.angle > -Math.PI/50){
+					this.jumpNum = 0;
+					this.velY = 0;
+					collided = true;
+				}
+				
+				this.x += collision.dist*collision.line.x;
+				this.y += collision.dist*collision.line.y;				
+				// this.velX = collision.dist*collision.line.x;
+				// this.velY = -collision.dist*collision.line.y;
+			}
+			if(!collided) this.velY += this.gravity;
+		};
+
+		this.on('tick', handleEnvironment);
+
 	}
 
 	/**
@@ -239,7 +417,8 @@ class Character extends Sprite {
 	 * @return {Object} coordinates
 	 */
 	get box(){
-		const w = this.width/2; const h = this.height/2
+		const bounds = this.getBounds();
+		const w = bounds.width/2; const h = bounds.height/2
 		return {
 			x: this.x-w, 
 			y: this.y-h,
@@ -254,14 +433,12 @@ class Character extends Sprite {
 	 * @param  {SpriteSheet} spriteSheet - Sprite Sheet being changed to.
 	 */
 	changeSpriteSheet(spriteSheet){
-		const bounds = spriteSheet.getFrameBounds(0);
 
 		/**
 		 * @private
 		 */
 		this.spriteSheet = spriteSheet;
-		this.scaleX = this.width/bounds.width;
-		this.scaleY = this.height/bounds.height;
+		const bounds = this.getBounds();
 		this.regX = bounds.width/2; this.regY = bounds.height/2;
 		this.gotoAndPlay("stand");
 	}

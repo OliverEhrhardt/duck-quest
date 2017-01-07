@@ -1,12 +1,20 @@
 import {Bitmap} from "EaselJS";
 
 class Environment extends Bitmap {
-	constructor(map, x, y){
+	constructor(map){
 		super(map.image);
 		this.data = map.data;
-		this.posX = x;
-		this.posY = y;
+		// this.posX = x;
+		// this.posY = y;
 
+	}
+
+	get posX(){
+		return this.x;
+	}
+
+	get posY(){
+		return this.y;
 	}
 
 	set posX(val){
